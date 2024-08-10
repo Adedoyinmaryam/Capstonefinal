@@ -1,0 +1,8 @@
+.App{
+    font-size: 15px;
+    color:aqua;
+    background-color: brown;
+    line-height: 5%;
+    letter-spacing: normal;
+    display: grid;
+}
