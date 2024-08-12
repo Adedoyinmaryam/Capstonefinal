@@ -1,59 +1,132 @@
-import React, { useState, useEffect} from "react";
-import { iniitializeTimes, updateTimes } from './Main.js'
-function Bookingform({ availableTimes, dispatch }) {
-    const handleChange = (e) => {
-        dispatch({ type: 'UPDATE_TIMES', payload: e.target.value });
-    }
-    const [availableTimes, setAvailableTimes] = useState([]);
+import React, { useState, useEffect } from "react";
+import { initializeTimes } from './Main.js';
+import { useNavigate } from "react-router-dom";
 
-        useEffect(() => {
-            const times = iniitializeTimes();
-            setAvailableTimes(times);
-        }, []);
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        props.submitForm(e);
-    };
+function BookingForm() {
+  const [formData, setFormData] = useState({
+    date: '',
+    guests: '',
+    time: '',
+    occasion: ''
+  });
 
-    return (
-        <>
-        <h1>Booking form</h1>
-        <form onSubmit={handleSubmit}>
-            <label for="res-date">Date:</label>
-            <input
+  const [error, setError] = React.useState({});
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.date) newErrors.date = 'Date is required';
+    if (!formData.guests || formData.guests < 1 || formData.guests > 10) newErrors.guests = 'Number of guests is invalid';
+    if (!formData.time) newErrors.time = 'Time is required';
+    if (!formData.occasion) newErrors.occasion = 'Occasion is required';
+    setError(newErrors);
+    // Form is valid if there are no errors
+    setIsFormValid(Object.keys(newErrors).length === 0);
+  };
+
+  useEffect(() => {
+    validateForm();
+  }, [formData]); // Add formData as a dependency
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData, [e.target.name]: e.target.value
+    });
+  }
+
+  const [availableTimes, setAvailableTimes] = useState([]);
+
+  useEffect(() => {
+    const times = initializeTimes(new Date()); // Pass a date to the initializeTimes function
+    setAvailableTimes(times);
+  }, []);
+
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log(formData); // You can handle form submission here
+    navigate('/confirmedbooking');
+  }
+
+  if (isFormValid) {
+    console.log('Form Submitted', formData);
+  } else {
+    console.log('Form is invalid');
+  }
+
+  return (
+    <div className="booking-form-container">
+      <h1 className="booking-form-title">Booking form</h1>
+      <form onSubmit={handleSubmit} className="booking-form">
+        <div className="form-group">
+          <label htmlFor="res-date" className="form-label">Date:</label>
+          <input
+            required
             type="date"
             id="res-date"
             aria-label="On Click"
             placeholder="Date"
-            onChange={handleChange}/>
-            <label for="res-time">Choose Time:</label>
-            <select
+            name="date"
+            value={formData.date}
+            onChange={handleChange}
+            className="form-input"
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="res-time" className="form-label">Choose Time:</label>
+          <select
+            required
             id="res-time"
-            onChange={handleChange}>
+            name="time"
+            value={formData.time}
+            onChange={handleChange}
+            aria-label="On Click"
+            className="form-select"
+          >
             {availableTimes.map((time) => (
-                        <option key={time} value={time}>
-                            {time}
-                        </option>
+              <option key={time} value={time}>
+                {time}
+              </option>
             ))}
-            </select>
-            <label for="guests">Number of Guests</label>
-            <input type="number"
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="guests" className="form-label">Number of Guests</label>
+          <input
+            type="number"
             placeholder="number of guests"
             min="1"
             max="10"
             id="guests"
+            name="guests"
+            value={formData.guests}
             onChange={handleChange}
-            />
-            <label>Occasion:</label>
-            <select
+            required
+            aria-label="On Click"
+            className="form-input"
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Occasion:</label>
+          <select
+            required
             id="occasion"
-            onChange={handleChange}>
-                <option>Birthday</option>
-                <option>Anniversary</option>
-            </select>
-            <input type="submit" value="Make your reservation"/>
-        </form></>
-    )
+            name="occasion"
+            value={formData.occasion}
+            onChange={handleChange}
+            aria-label="On Click"
+            className="form-select"
+          >
+            <option value="select">Select one</option>
+            <option value="Birthday">Birthday</option>
+            <option value="Anniversary">Anniversary</option>
+          </select>
+        </div>
+        {error.occasion && <div className="error-message">{error.occasion}</div>}
+        <input className="submit-button" type="submit" value="Reserve a table" aria-label="submit button"/>
+      </form>
+    </div>
+  )
 }
-
-export default Bookingform;
+export default BookingForm;

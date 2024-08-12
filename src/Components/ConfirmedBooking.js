@@ -1,9 +1,10 @@
 import React from "react";
 
 function ConfirmedBooking() {
-    <main>
-        <h1>Booking Confirmed!</h1>
-        <p>The booking has been confirmed!</p>
+    return (
+    <main className="confirmed">
+        <p>The booking has been <span className="blue">confirmed!</span></p>
     </main>
+    );
 }
 export default ConfirmedBooking

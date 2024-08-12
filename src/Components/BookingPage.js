@@ -1,15 +1,13 @@
 import React from "react";
-import Bookingform from './Bookingform.js';
+import BookingForm from './Bookingform.js';
 
-function BookingPage({ availableTimes, dispatch}) {
+function BookingPage(props) {
     return (
-        <main>
-        <h1>Booking Form</h1>
-        <Bookingform
-        availableTimes={availableTimes}
-        dispatch={dispatch}
-        />
-        </main>
+        <div className="booking-page">
+            <div className="booking-form">
+                <BookingForm availableTimes={props.availableTimes} dispatch={props.dispatch} submitForm={props.submitForm}/>
+            </div>
+        </div>
     )
 }
-export default BookingPage
+export default BookingPage;
