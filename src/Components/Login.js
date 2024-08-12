@@ -38,11 +38,12 @@ function LoginComponent() {
         {error && <div className="error-message">{error}</div>}
         <button className='submit-login' type="submit">Login</button>
         <br />
+        <br />
         <label>
-          <input type="checkbox" /> Remember me
+          <input type="checkbox" className='login-select'/> Remember me
         </label>
         <br />
-        <a href="#">Forgot password?</a>
+        <a href="/" className='a'>Forgot password?</a>
         </div>
       </form>
     </div>

@@ -251,6 +251,10 @@ nav button:hover {
   margin-bottom: 10px;
   font-weight: bold;
 }
+.a:hover{
+color: blue;
+display: block;
+}
 .login-input{
   width: 100%;
   padding: 10px;
